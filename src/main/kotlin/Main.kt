@@ -29,9 +29,9 @@ Command line: transpose [-a num] [-t] [-r] [-o ofile] [file]
 выравнивать текст так, будто указан флаг “-а 10”.
 Кроме самой программы, следует написать автоматические тесты к ней.
  */
-fun main(args: Array<String>) {
-    if (args[0] == "transpose") Transpose().main(args.copyOfRange(1, args.size))
-}
+fun main(args: Array<String>) = start(args)
+
+fun start(args: Array<String>) = Transpose().main(args)
 
 class Transpose: CliktCommand() {
 
@@ -45,7 +45,26 @@ class Transpose: CliktCommand() {
         val text = if (inputName.isBlank()) readLine()
         else File(inputName).readText()
         if (text == null) return
-        val matrix = Matrix.fromString(text)
+        val matrix = Matrix.fromString(text).transposed()
+        if (num != null) {
+            matrix.num(num!!)
+            if (cut) matrix.cut(num!!)
+            if (byRightSide) matrix.makeRight()
+        } else if (cut && byRightSide) {
+            matrix.num(10)
+            matrix.cut(10)
+            matrix.makeRight()
+        } else if (cut) {
+            matrix.num(10)
+            matrix.cut(10)
+        } else if (byRightSide) {
+            matrix.num(10)
+            matrix.makeRight()
+        }
+        if (outputFile != null) {
+            File(outputFile!!).writeText(matrix.toString())
+        } else print(matrix.toString())
+
     }
 
 }
