@@ -1,13 +1,13 @@
-class Matrix(given: Array<Array<String?>>) {
+class Matrix(given: Array<Array<String>>) {
 
-    constructor(listMatrix: List<List<String?>>): this(listMatrix.map { row -> row.toTypedArray() }.toTypedArray())
+    constructor(listMatrix: List<List<String>>): this(listMatrix.map { row -> row.toTypedArray() }.toTypedArray())
 
     val xsize = given.maxOf { row -> row.size }
     val ysize = given.size
     val matrix = Array(ysize) { i ->
         Array(xsize) { j ->
             if (j < given[i].size) given[i][j]
-            else null
+            else ""
         }
     }
 
@@ -21,20 +21,19 @@ class Matrix(given: Array<Array<String?>>) {
         return Matrix(transposedArray)
     }
 
-    fun num(n: Int?): Matrix {
-        if (n == null) return this
+    fun num(n: Int): Matrix {
         this.forEachIndexed { i, j, string ->
-            if (string != null && string.length < n) {
+            if (string != "" && string.length < n) {
                 this[i, j] = string + " ".repeat(n - string.length)
             }
         }
+
         return this
     }
 
-    fun cut(n: Int?): Matrix {
-        if (n == null) return this
+    fun cut(n: Int): Matrix {
         this.forEachIndexed { i, j, string ->
-            if (string != null && string.length > n) {
+            if (string != "" && string.length > n) {
                 this[i, j] = string.substring(0, n)
             }
         }
@@ -43,7 +42,12 @@ class Matrix(given: Array<Array<String?>>) {
 
     fun makeRight(): Matrix {
         this.forEachIndexed { i, j, string ->
-            TODO("Серега блять делай вот ЭТО!!!, а не ебучую хуйню")
+            val sep = string.indexOf(" ")
+            if (sep != -1) {
+                val spaces = string.substring(sep)
+                val word = string.substring(0, sep)
+                this[i, j] = spaces + word
+            }
         }
         return this
     }
@@ -51,7 +55,7 @@ class Matrix(given: Array<Array<String?>>) {
     fun isLastOnRow(y: Int, x: Int): Boolean {
         if (x == xsize - 1) return true
         for (j in x + 1 until xsize) {
-            if (matrix[y][j] != null) return false
+            if (matrix[y][j] != "") return false
         }
         return true
     }
@@ -59,7 +63,7 @@ class Matrix(given: Array<Array<String?>>) {
     fun isLastOnColumn(y: Int, x: Int): Boolean {
         if (y == ysize - 1) return true
         for (i in y + 1 until ysize) {
-            if (matrix[i][x] != null) return false
+            if (matrix[i][x] != "") return false
         }
         return true
     }
@@ -68,7 +72,7 @@ class Matrix(given: Array<Array<String?>>) {
         val sb = StringBuilder()
         matrix.forEachIndexed { i, row ->
             row.forEachIndexed { j, string ->
-                if (string != null) {
+                if (string != "") {
                     if (!isLastOnRow(i, j)) {
                         sb.append("$string ")
                     } else sb.append(string)
@@ -100,15 +104,15 @@ class Matrix(given: Array<Array<String?>>) {
         return result
     }
 
-    inline fun Matrix.forEachIndexed(action: (Int, Int, String?) -> Unit): Unit {
+    inline fun Matrix.forEachIndexed(action: (Int, Int, String) -> Unit) {
         for (y in 0 until ysize) {
             for (x in 0 until xsize) {
-                action(x, y, this[x, y])
+                action(y, x, this[y, x])
             }
         }
     }
 
-    inline fun Matrix.forEach(action: (String?) -> Unit): Unit {
+    inline fun Matrix.forEach(action: (String) -> Unit) {
         forEachIndexed { x, y, value -> action(value) }
     }
 

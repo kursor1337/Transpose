@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test
 class MatrixTest {
 
 
-    val expected = Matrix(
+    val expectedSimple = Matrix(
         listOf(
-            listOf("1", "1", "1", null, null),
+            listOf("1", "1", "1", "", ""),
             listOf("1", "1", "1", "1", "1"),
-            listOf("1", "1", "1", "1", null),
-            listOf("1", "1", null, null, null)
+            listOf("1", "1", "1", "1", ""),
+            listOf("1", "1", "", "", "")
         )
     )
 
@@ -24,7 +24,7 @@ class MatrixTest {
             )
         )
 
-        assertEquals(expected, result)
+        assertEquals(expectedSimple, result)
     }
 
     @Test
@@ -36,7 +36,7 @@ class MatrixTest {
             1 1
         """.trimIndent())
 
-        assertEquals(expected, result)
+        assertEquals(expectedSimple, result)
     }
 
     @Test
@@ -46,17 +46,17 @@ class MatrixTest {
             1 1 1 1 1
             1 1 1 1
             1 1
-        """.trimIndent(), expected.toString())
+        """.trimIndent(), expectedSimple.toString())
     }
 
     @Test
     fun fromToString() {
-        assertEquals(expected, Matrix.fromString(expected.toString()))
+        assertEquals(expectedSimple, Matrix.fromString(expectedSimple.toString()))
     }
 
     @Test
     fun toFromString() {
-        assertEquals(expected.toString(), Matrix.fromString(expected.toString()).toString())
+        assertEquals(expectedSimple.toString(), Matrix.fromString(expectedSimple.toString()).toString())
     }
 
     @Test
@@ -65,14 +65,97 @@ class MatrixTest {
             listOf(
                 listOf("1", "1", "1", "1"),
                 listOf("1", "1", "1", "1"),
-                listOf("1", "1", "1", null),
-                listOf(null, "1", "1", null),
-                listOf(null, "1", null, null)
+                listOf("1", "1", "1", ""),
+                listOf("", "1", "1", ""),
+                listOf("", "1", "", "")
             )
         )
-        assertEquals(expected, result.transposed())
+        assertEquals(expectedSimple, result.transposed())
     }
 
+    @Test
+    fun num() {
+        val result = expectedSimple.num(2)
+        val expected2 = Matrix(
+            listOf(
+                listOf("1 ", "1 ", "1 ", "", ""),
+                listOf("1 ", "1 ", "1 ", "1 ", "1 "),
+                listOf("1 ", "1 ", "1 ", "1 ", ""),
+                listOf("1 ", "1 ", "", "", "")
+            )
+        )
+        assertEquals(expected2, result)
+    }
 
+    @Test
+    fun numCut() {
+        val result = Matrix(
+            listOf(
+                listOf("11111", "11111", "11111", "", ""),
+                listOf("11111", "11111", "11111", "11111", "11111"),
+                listOf("1", "111111111", "11", "111", ""),
+                listOf("111111", "111111", "", "", "")
+            )
+        )
 
+        result.num(3).cut(3)
+
+        val expected = Matrix(
+            listOf(
+                listOf("111", "111", "111", "", ""),
+                listOf("111", "111", "111", "111", "111"),
+                listOf("1  ", "111", "11 ", "111", ""),
+                listOf("111", "111", "", "", "")
+            )
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun numMakeRight() {
+        val result = Matrix(
+            listOf(
+                listOf("11111", "11111", "11111", "", ""),
+                listOf("11111", "11111", "11111", "11111", "11111"),
+                listOf("1  ", "111111111", "11 ", "111", ""),
+                listOf("111111", "111111", "", "", "")
+            )
+        )
+
+        result.num(3).makeRight()
+
+        val expected = Matrix(
+            listOf(
+                listOf("11111", "11111", "11111", "", ""),
+                listOf("11111", "11111", "11111", "11111", "11111"),
+                listOf("  1", "111111111", " 11", "111", ""),
+                listOf("111111", "111111", "", "", "")
+            )
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun numCutMakeRight() {
+        val result = Matrix(
+            listOf(
+                listOf("11111", "11111", "11111", "", ""),
+                listOf("11111", "11111", "11111", "11111", "11111"),
+                listOf("1  ", "111111111", "11 ", "111", ""),
+                listOf("111111", "111111", "", "", "")
+            )
+        )
+
+        result.num(3).cut(3).makeRight()
+
+        val expected = Matrix(
+            listOf(
+                listOf("111", "111", "111", "", ""),
+                listOf("111", "111", "111", "111", "111"),
+                listOf("  1", "111", " 11", "111", ""),
+                listOf("111", "111", "", "", "")
+            )
+        )
+        assertEquals(expected, result)
+    }
 }
