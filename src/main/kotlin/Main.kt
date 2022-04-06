@@ -4,7 +4,6 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import java.io.File
-import java.lang.StringBuilder
 import java.util.*
 
 
@@ -35,7 +34,7 @@ fun main(args: Array<String>) = start(args)
 
 fun start(args: Array<String>) = Transpose().main(args)
 
-class Transpose: CliktCommand() {
+class Transpose : CliktCommand() {
 
     val num by option("-a").int()
     val outputFile by option("-o")

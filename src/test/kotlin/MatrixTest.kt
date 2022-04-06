@@ -29,24 +29,28 @@ class MatrixTest {
 
     @Test
     fun fromString() {
-        val result = Matrix("""
+        val result = Matrix(
+            """
             1 1 1
             1 1 1 1 1
             1 1 1 1
             1 1
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         assertEquals(expectedSimple, result)
     }
 
     @Test
     fun toStringTest() {
-        assertEquals("""
+        assertEquals(
+            """
             1 1 1
             1 1 1 1 1
             1 1 1 1
             1 1
-        """.trimIndent(), expectedSimple.toString())
+        """.trimIndent(), expectedSimple.toString()
+        )
     }
 
     @Test
