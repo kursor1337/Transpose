@@ -29,7 +29,7 @@ class MatrixTest {
 
     @Test
     fun fromString() {
-        val result = Matrix.fromString("""
+        val result = Matrix("""
             1 1 1
             1 1 1 1 1
             1 1 1 1
@@ -51,12 +51,12 @@ class MatrixTest {
 
     @Test
     fun fromToString() {
-        assertEquals(expectedSimple, Matrix.fromString(expectedSimple.toString()))
+        assertEquals(expectedSimple, Matrix(expectedSimple.toString()))
     }
 
     @Test
     fun toFromString() {
-        assertEquals(expectedSimple.toString(), Matrix.fromString(expectedSimple.toString()).toString())
+        assertEquals(expectedSimple.toString(), Matrix(expectedSimple.toString()).toString())
     }
 
     @Test

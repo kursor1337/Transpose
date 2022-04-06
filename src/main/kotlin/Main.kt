@@ -4,6 +4,8 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import java.io.File
+import java.lang.StringBuilder
+import java.util.*
 
 
 /*
@@ -42,29 +44,17 @@ class Transpose: CliktCommand() {
     val inputName by argument()
 
     override fun run() {
-        val text = if (inputName.isBlank()) readLine()
-        else File(inputName).readText()
-        if (text == null) return
-        val matrix = Matrix.fromString(text).transposed()
-        if (num != null) {
-            matrix.num(num!!)
-            if (cut) matrix.cut(num!!)
-            if (byRightSide) matrix.makeRight()
-        } else if (cut && byRightSide) {
-            matrix.num(10)
-            matrix.cut(10)
-            matrix.makeRight()
-        } else if (cut) {
-            matrix.num(10)
-            matrix.cut(10)
-        } else if (byRightSide) {
-            matrix.num(10)
-            matrix.makeRight()
-        }
+        val text = if (inputName.isBlank()) {
+            val sb = StringBuilder()
+            val scanner = Scanner(System.`in`)
+            while (scanner.hasNextLine()) sb.append("${scanner.nextLine()}\n")
+            sb.toString().removeSuffix("\n")
+        } else File(inputName).readText()
+        if (text.isBlank()) return
+        val matrix = Matrix(text, transposed = true).applyArgs(num, cut, byRightSide)
         if (outputFile != null) {
             File(outputFile!!).writeText(matrix.toString())
         } else print(matrix.toString())
 
     }
-
 }
