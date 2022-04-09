@@ -10,15 +10,15 @@ class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
         transposed
     )
 
-    val xsize: Int = given.maxOf { row -> row.size }
-    val ysize: Int = given.size
+    val xsize: Int
+    val ysize: Int
     val matrix: Array<Array<String>>
 
     init {
-        val xsize = if (transposed) given.size
+        xsize = if (transposed) given.size
         else given.maxOf { row -> row.size }
 
-        val ysize = if (transposed) given.maxOf { row -> row.size }
+        ysize = if (transposed) given.maxOf { row -> row.size }
         else given.size
 
         matrix = if (transposed) {

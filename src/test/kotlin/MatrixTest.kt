@@ -15,7 +15,7 @@ class MatrixTest {
 
     @Test
     fun constructor() {
-        val result = Matrix(
+        val result1 = Matrix(
             listOf(
                 listOf("1", "1", "1"),
                 listOf("1", "1", "1", "1", "1"),
@@ -23,8 +23,18 @@ class MatrixTest {
                 listOf("1", "1")
             )
         )
+        assertEquals(expectedSimple, result1)
 
-        assertEquals(expectedSimple, result)
+        val result2 = Matrix(
+            listOf(
+                listOf("1", "1", "1", "1"),
+                listOf("1", "1", "1", "1"),
+                listOf("1", "1", "1", ""),
+                listOf("", "1", "1", ""),
+                listOf("", "1", "", "")
+            ), transposed = true
+        )
+        assertEquals(expectedSimple, result2)
     }
 
     @Test
