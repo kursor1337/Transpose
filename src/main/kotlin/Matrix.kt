@@ -1,12 +1,7 @@
-class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
-
-    constructor(listMatrix: List<List<String>>, transposed: Boolean = false) : this(
-        listMatrix.map { row -> row.toTypedArray() }.toTypedArray(),
-        transposed
-    )
+class Matrix(given: MutableList<MutableList<String>>, transposed: Boolean = false) {
 
     constructor(string: String, transposed: Boolean = false) : this(
-        string.lines().map { it.split(Regex("""\s+""")) },
+        string.lines().map { it.split(Regex("""\s+""")).toMutableList() }.toMutableList() ,
         transposed
     )
 
@@ -37,11 +32,6 @@ class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
     operator fun get(i: Int, j: Int) = matrix[i][j]
     operator fun set(i: Int, j: Int, value: String) {
         matrix[i][j] = value
-    }
-
-    fun transposed(): Matrix {
-        val transposedArray = Array(xsize) { i -> Array(ysize) { j -> matrix[j][i] } }
-        return Matrix(transposedArray)
     }
 
     fun num(n: Int): Matrix {
@@ -83,22 +73,6 @@ class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
         return this
     }
 
-//    fun isLastOnRow(y: Int, x: Int): Boolean {
-//        if (x == xsize - 1) return true
-//        for (j in x + 1 until xsize) {
-//            if (matrix[y][j] != "") return false
-//        }
-//        return true
-//    }
-//
-//    fun isLastOnColumn(y: Int, x: Int): Boolean {
-//        if (y == ysize - 1) return true
-//        for (i in y + 1 until ysize) {
-//            if (matrix[i][x] != "") return false
-//        }
-//        return true
-//    }
-
     override fun toString(): String {
         val sb = StringBuilder()
 
@@ -112,7 +86,7 @@ class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
         return sb.toString()
     }
 
-    inline fun Matrix.forEachIndexed(action: (Int, Int, String) -> Unit) {
+    inline fun forEachIndexed(action: (Int, Int, String) -> Unit) {
         for (y in 0 until ysize) {
             for (x in 0 until xsize) {
                 action(y, x, this[y, x])
@@ -120,12 +94,12 @@ class Matrix(given: Array<Array<String>>, transposed: Boolean = false) {
         }
     }
 
-    inline fun Matrix.forEach(action: (String) -> Unit) {
+    inline fun forEach(action: (String) -> Unit) {
         forEachIndexed { x, y, value -> action(value) }
     }
 
 
-    inline fun Matrix.mapToThis(action: (String) -> String) {
+    inline fun mapToThis(action: (String) -> String) {
         forEachIndexed { i, j, string ->
             this[i, j] = action(string)
         }
